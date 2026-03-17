@@ -1,0 +1,47 @@
+# Descriptive starter metadata for review and registry alignment.
+# This file does not claim automated installation support.
+id: agentic-iam
+name: AGENTIC-IAM
+version: 0.1.0
+type: documentation-first-foundation
+installsInto:
+  - manual-copy
+  - subtree-vendor
+ownedPaths:
+  - docs/domain-templates/IDENTITY-ACCESS/
+  - docs/policies/
+  - docs/starter/
+  - app/README.md
+  - README.md
+  - starter.manifest.yaml
+  - starter.json
+dependencies: []
+optionalDependencies: []
+provides:
+  - Identity & Access domain language baseline
+  - tenant-scoped authorization baseline
+  - Permission baseline and role constraints
+  - ADR seed set for unresolved IAM decisions
+  - manual-adoption guidance for downstream projects
+requires:
+  - project-specific runtime implementation
+  - project-specific authentication and authorization enforcement
+  - downstream ADR decisions for unresolved design points
+  - downstream mapping into delivery backlog and governance process
+  - platform-specific publication schema alignment if registry automation is required
+postInstallChecks:
+  - Confirm manual-copy or subtree-vendor is the intended consumption path for the target project.
+  - Confirm adopted terminology remains User, Tenant, TenantMembership, TenantRole, Permission, and AuditEvent unless intentionally changed.
+  - Confirm downstream project selects an explicit tenant context resolution strategy.
+  - Confirm downstream project defines runtime enforcement and AuditEvent persistence mechanisms.
+  - Confirm starter metadata is mapped to the current Agentic publication schema before registry submission.
+tags:
+  - agentic
+  - iam
+  - identity-access
+  - multi-tenant
+  - documentation-first
+  - architecture-agnostic
+  - starter
+  - foundation
+  - manual-adoption

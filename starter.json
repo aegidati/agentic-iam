@@ -1,0 +1,7 @@
+{
+  "name": "AGENTIC-IAM",
+  "version": "0.1.0",
+  "description": "Optional Identity & Access foundation starter for the Agentic ecosystem. Architecture-agnostic, documentation-first, and intended for manual adoption.",
+  "entry": "README.md",
+  "stack": "architecture-agnostic, documentation-first foundation starter, manual adoption"
+}

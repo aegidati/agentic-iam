@@ -1,0 +1,115 @@
+name: Starter CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Verify required files exist
+        shell: bash
+        run: |
+          required_files=(
+            "README.md"
+            "AUDIT-REPORT.md"
+            "starter.manifest.yaml"
+            "starter.json"
+            "app/README.md"
+            ".github/copilot-instructions.md"
+            "docs/domain-templates/IDENTITY-ACCESS/DOMAIN-MODEL.md"
+            "docs/domain-templates/IDENTITY-ACCESS/FEATURES-CATALOG.md"
+            "docs/domain-templates/IDENTITY-ACCESS/ADR-SEEDS.md"
+            "docs/domain-templates/IDENTITY-ACCESS/EVENTS.md"
+            "docs/policies/AUTHORIZATION-PRINCIPLES.md"
+            "docs/policies/PERMISSION-MATRIX.md"
+            "docs/starter/STARTER-SCOPE.md"
+            "docs/starter/INSTALLATION-STRATEGY.md"
+            "docs/starter/CONSUMPTION-GUIDE.md"
+          )
+
+          for file in "${required_files[@]}"; do
+            if [ ! -f "$file" ]; then
+              echo "Missing required file: $file"
+              exit 1
+            fi
+          done
+
+      - name: Verify markdown documentation exists
+        shell: bash
+        run: |
+          markdown_count=$(find . -type f -name "*.md" | wc -l)
+          if [ "$markdown_count" -lt 8 ]; then
+            echo "Expected markdown documentation, found only $markdown_count files"
+            exit 1
+          fi
+
+      - name: Verify starter metadata exists
+        shell: bash
+        run: |
+          test -f starter.manifest.yaml
+          test -f starter.json
+
+      - name: Verify repository contract statements
+        shell: bash
+        run: |
+          grep -q "architecture-agnostic" README.md
+          grep -q "documentation-first" README.md
+          grep -q "domain/foundation starter, not a runtime stack starter" README.md
+          grep -q "manual copy or subtree-style vendoring" docs/starter/INSTALLATION-STRATEGY.md
+          grep -q "manual copy or subtree-style vendoring" docs/starter/CONSUMPTION-GUIDE.md
+          grep -q "TenantMembership" docs/domain-templates/IDENTITY-ACCESS/DOMAIN-MODEL.md
+          grep -q "TenantRole" docs/domain-templates/IDENTITY-ACCESS/DOMAIN-MODEL.md
+          grep -q "Permission" docs/domain-templates/IDENTITY-ACCESS/DOMAIN-MODEL.md
+          grep -q "AuditEvent" docs/domain-templates/IDENTITY-ACCESS/DOMAIN-MODEL.md
+          grep -q "deny-by-default" docs/domain-templates/IDENTITY-ACCESS/DOMAIN-MODEL.md
+          grep -q "Cross-tenant authorization inheritance is forbidden" docs/policies/AUTHORIZATION-PRINCIPLES.md
+          grep -q "Admin cannot assign Owner or Admin unless a future policy explicitly allows it." docs/policies/PERMISSION-MATRIX.md
+          grep -q "Admin cannot remove Owner." docs/policies/PERMISSION-MATRIX.md
+
+      - name: Verify no runtime source files exist
+        shell: bash
+        run: |
+          runtime_files=$(find . \
+            -path './.git' -prune -o \
+            -path './.github' -prune -o \
+            -type f \( \
+              -name '*.js' -o \
+              -name '*.jsx' -o \
+              -name '*.ts' -o \
+              -name '*.tsx' -o \
+              -name '*.cs' -o \
+              -name '*.java' -o \
+              -name '*.py' -o \
+              -name '*.go' -o \
+              -name '*.rs' -o \
+              -name '*.php' -o \
+              -name '*.rb' -o \
+              -name '*.scala' -o \
+              -name '*.kt' -o \
+              -name '*.swift' \
+            \) -print)
+
+          if [ -n "$runtime_files" ]; then
+            echo "Unexpected runtime source files detected:"
+            echo "$runtime_files"
+            exit 1
+          fi
+
+      - name: Guard against unexpected runtime folders
+        shell: bash
+        run: |
+          unexpected_dirs=(src server backend frontend web api services)
+
+          for dir in "${unexpected_dirs[@]}"; do
+            if [ -d "$dir" ]; then
+              echo "Unexpected runtime-oriented folder detected: $dir"
+              exit 1
+            fi
+          done
