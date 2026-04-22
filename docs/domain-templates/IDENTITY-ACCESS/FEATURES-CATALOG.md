@@ -32,13 +32,23 @@ Status: Recommended baseline
 
 Defines the expectation that membership changes, role changes, removals, and ownership transitions produce traceable AuditEvent records. Derived projects should implement persistence and access patterns appropriate to their compliance needs.
 
-## IAM-006 Identity Suspension And Recovery
+Platform-scoped authorization changes such as assigning, revoking, or exercising Superadmin privileges should also be treated as governance-relevant audit events.
+
+## IAM-006 Platform Superadmin Governance Baseline
+
+Status: Seeded with governance dependency
+
+Defines a platform-scoped authorization baseline for governance operations that span the whole platform rather than a single Tenant. This feature introduces PlatformRole with the baseline value Superadmin and keeps it explicitly separate from TenantRole.
+
+Derived projects should decide which operations are truly platform-scoped, how Superadmin is granted and revoked, and how audit, review, and emergency access are governed.
+
+## IAM-007 Identity Suspension And Recovery
 
 Status: Proposed extension
 
 Defines a reusable pattern for temporarily restricting a User or TenantMembership and supporting controlled recovery. Derived projects should decide whether suspension is global, tenant-scoped, or both.
 
-## IAM-007 External Identity Provider Integration
+## IAM-008 External Identity Provider Integration
 
 Status: Optional integration seed
 

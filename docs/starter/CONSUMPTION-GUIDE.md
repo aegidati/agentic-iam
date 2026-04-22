@@ -11,11 +11,12 @@ This guide assumes the authoritative supported consumption model is manual copy 
 1. Review the scope in [docs/starter/STARTER-SCOPE.md](docs/starter/STARTER-SCOPE.md) to confirm that a domain/foundation starter is what the project needs.
 2. Copy the IAM documentation set into the target repository using a copy-based or subtree-style approach.
 3. Keep the core terms User, Tenant, TenantMembership, TenantRole, Permission, and AuditEvent stable unless the project records a deliberate change.
-4. Review [docs/domain-templates/IDENTITY-ACCESS/DOMAIN-MODEL.md](docs/domain-templates/IDENTITY-ACCESS/DOMAIN-MODEL.md) and align the project's business language with it.
-5. Convert [docs/domain-templates/IDENTITY-ACCESS/FEATURES-CATALOG.md](docs/domain-templates/IDENTITY-ACCESS/FEATURES-CATALOG.md) into project-specific feature work.
-6. Promote the seeds in [docs/domain-templates/IDENTITY-ACCESS/ADR-SEEDS.md](docs/domain-templates/IDENTITY-ACCESS/ADR-SEEDS.md) into project ADRs.
-7. Use [docs/policies/AUTHORIZATION-PRINCIPLES.md](docs/policies/AUTHORIZATION-PRINCIPLES.md) and [docs/policies/PERMISSION-MATRIX.md](docs/policies/PERMISSION-MATRIX.md) as the baseline for project-specific enforcement design.
-8. Derive runtime implementation work only after the business model, policy baseline, and key ADRs are explicit.
+4. If platform-wide governance is needed, introduce PlatformRole as a separate concept rather than extending TenantRole with global meaning.
+5. Review [docs/domain-templates/IDENTITY-ACCESS/DOMAIN-MODEL.md](docs/domain-templates/IDENTITY-ACCESS/DOMAIN-MODEL.md) and align the project's business language with it.
+6. Convert [docs/domain-templates/IDENTITY-ACCESS/FEATURES-CATALOG.md](docs/domain-templates/IDENTITY-ACCESS/FEATURES-CATALOG.md) into project-specific feature work.
+7. Promote the seeds in [docs/domain-templates/IDENTITY-ACCESS/ADR-SEEDS.md](docs/domain-templates/IDENTITY-ACCESS/ADR-SEEDS.md) into project ADRs.
+8. Use [docs/policies/AUTHORIZATION-PRINCIPLES.md](docs/policies/AUTHORIZATION-PRINCIPLES.md) and [docs/policies/PERMISSION-MATRIX.md](docs/policies/PERMISSION-MATRIX.md) as the baseline for project-specific enforcement design.
+9. Derive runtime implementation work only after the business model, policy baseline, and key ADRs are explicit.
 
 ## How To Copy Or Adopt The Domain Template
 
@@ -32,7 +33,9 @@ Teams may then:
 - map each IAM feature seed into a project feature, epic, or workstream
 - convert each ADR seed into a real decision record with project context
 - record any deviations from the baseline Permission matrix or TenantRole assumptions
+- explicitly decide whether PlatformRole and Superadmin are in scope and which operations are truly platform-scoped
 - ensure any ownership-transfer or last-owner policy is explicitly decided before sensitive workflows are implemented
+- ensure Superadmin is never modeled as an implicit Owner or Admin membership shortcut across Tenants
 
 ## How To Derive Project-Specific IAM Implementation Work
 
@@ -43,6 +46,7 @@ Examples of implementation work categories:
 - authentication integration choices
 - tenant context resolution flows
 - authorization enforcement model
+- platform governance and Superadmin assignment model
 - membership lifecycle workflows
 - audit persistence and reporting
 - ownership transfer safeguards
@@ -57,3 +61,4 @@ If a future publication workflow offers automated handling for documentation-fir
 - avoid embedding API, database, or UI assumptions into shared domain documents
 - document runtime choices in project ADRs rather than mutating the starter baseline casually
 - preserve the separation between domain guidance and implementation details
+- preserve the separation between PlatformRole and TenantRole in downstream designs

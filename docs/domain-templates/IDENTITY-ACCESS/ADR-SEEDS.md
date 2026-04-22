@@ -27,6 +27,18 @@ Options to consider:
 
 Decision point: Define how Tenant context is resolved, switched, persisted, and invalidated.
 
+## PlatformRole Boundary
+
+Question: How should PlatformRole-based governance be separated from tenant-scoped TenantRole authorization?
+
+Options to consider:
+
+- strict separation with no implicit tenant rights
+- platform-scoped governance with explicit tenant targeting for affected operations
+- narrowly defined override flows with explicit ADR-backed exception handling
+
+Decision point: Define which operations are platform-scoped, whether any exception paths exist, and how derived projects prevent PlatformRole from becoming an implicit meta-TenantRole.
+
 ## Forbidden Vs Hidden Resource Policy
 
 Question: When a User lacks access, should the platform reveal resource existence or hide it?
@@ -88,6 +100,8 @@ Options to consider:
 
 Decision point: Choose the persistence and retention approach for AuditEvent records.
 
+Platform-scoped governance actions such as assigning, revoking, and exercising Superadmin privileges should be included in the chosen audit model.
+
 ## Global User Status Vs Tenant Membership
 
 Question: How should global User status interact with tenant-scoped TenantMembership decisions?
@@ -99,6 +113,18 @@ Options to consider:
 - tenant-scoped access remains primary unless compliance policy intervenes
 
 Decision point: Define the precedence model between global identity state and tenant-scoped membership state.
+
+## Platform Governance Audit And Oversight
+
+Question: What minimum oversight is required for platform-scoped governance actions?
+
+Options to consider:
+
+- audit all Superadmin assignment, revocation, and sensitive use
+- require additional review for selected platform-scope actions
+- define emergency or break-glass flows with mandatory post-action review
+
+Decision point: Select the minimum audit, review, and exception-handling baseline for platform-scoped governance.
 
 ## External Identity Provider Boundary
 
